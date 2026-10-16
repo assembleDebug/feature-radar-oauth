@@ -1,5 +1,7 @@
 import { OAuthClient } from './oauth';
 
+const ALLOWED_GITHUB_USERNAME = 'assembledebug';
+
 interface Env {
 	GITHUB_OAUTH_ID: string;
 	GITHUB_OAUTH_SECRET: string;
@@ -45,7 +47,7 @@ const handleAuth = async (url: URL, env: Env) => {
 	return new Response(null, { headers: { location: authorizationUri }, status: 301 });
 };
 
-const callbackScriptResponse = (status: string, token: string) => {
+const callbackScriptResponse = (status: string, token: string, message = 'Authorizing Decap...') => {
 	return new Response(
 		`
 <html>
@@ -62,7 +64,7 @@ const callbackScriptResponse = (status: string, token: string) => {
     window.opener.postMessage("authorizing:github", "*");
   </script>
   <body>
-    <p>Authorizing Decap...</p>
+    <p>${message}</p>
   </body>
 </head>
 </html>
@@ -87,6 +89,33 @@ const handleCallback = async (url: URL, env: Env) => {
 		code,
 		redirect_uri: `https://${url.hostname}/callback?provider=github`,
 	});
+
+	if (!accessToken) {
+		return new Response('GitHub did not return an access token', { status: 502 });
+	}
+
+	const userResponse = await fetch('https://api.github.com/user', {
+		headers: {
+			Authorization: `Bearer ${accessToken}`,
+			Accept: 'application/vnd.github+json',
+			'X-GitHub-Api-Version': '2022-11-28',
+			'User-Agent': 'Feature-Radar-OAuth',
+		},
+	});
+
+	if (!userResponse.ok) {
+		return new Response('Unable to verify GitHub account', { status: 502 });
+	}
+
+	const githubUser = (await userResponse.json()) as { login?: string };
+	if (githubUser.login?.toLowerCase() !== ALLOWED_GITHUB_USERNAME) {
+		return callbackScriptResponse(
+			'error',
+			'',
+			`Access denied. Only the GitHub account @${ALLOWED_GITHUB_USERNAME} can access Feature Radar admin.`,
+		);
+	}
+
 	return callbackScriptResponse('success', accessToken);
 };
 
