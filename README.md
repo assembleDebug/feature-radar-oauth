@@ -134,7 +134,7 @@ Now that everything has been set up in that terminal, it's just a matter of depl
 ```
 npx wrangler deploy
 ```
-Once deployed, you can test that the deployment has worked, by pointing your browser at your **PROXY URL**. If you see a page that says "Hello 👋", then it is deployed to the right location. This doesn't mean it is configured correctly, but at least it is being served in the right place.
+Once deployed, you can test that the deployment has worked, by pointing your browser at your **PROXY URL**. If you see a page that says "Hello 👋", then it is deployed to the right location. This doesn't mean it is configured correctly, but at least it is being served in the right place.tesr
 
 ### 3 Configure Decap CMS to use the OAuth Proxy
 
