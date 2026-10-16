@@ -6,7 +6,7 @@ A Cloudflare Worker Github OAuth proxy for [Decap CMS](https://github.com/decapo
 
 Suppose you have a website that is generated from some source files on GitHub and you want to provide an admin page where people who lack an understanding of git or HTML can edit the source files using a friendly browser-based interface. Decap CMS provides such an interface and can be configured to work with Github as the back-end, using Cloudflare to serve an [OAuth Proxy](https://decapcms.org/docs/backends-overview/#using-github-with-an-oauth-proxy) that will act as an authentication go-between.
 
-This repository provides the elements needed to deploy such an OAuth Proxy on a Cloudflare Worker node. The proxy will be deployed to its own subdomain, separate from whatever website domain you're using Decap to manage. That subdomain will be referenced by the **PROXY URL**, below, and used exclusively for hosting the OAuth Proxy. Either you will be using the `workers.dev` domain that Cloudflare automatically gives your workers, or you will be providing a custom subdomain (eg. `proxy.mydomain.com`) for a domain zone you own.
+This repository provides the elements needed to deploy such an OAuth Proxy on a Cloudflare Worker node. The proxy will be deployed to its own subdomain, separate from whatever website domain you're using Decap to manage. That subdomain will be referenced by the **PROXY URL**, below, and used exclusively for hosting the OAuth Proxy. Either you will be using the `workers.dev` domain that Cloudflare automatically gives your workers, or you will be providing a custom subdomain (eg. `proxy.mydomain.com`) for a domain zone you own. test.
 
 ```mermaid
 graph TD;
